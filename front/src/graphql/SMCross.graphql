@@ -1,0 +1,7 @@
+query SMCross ($id: Int) {
+  SMCross(id: $id) {
+    id
+    sensor_id
+    mcu_id
+  }
+}

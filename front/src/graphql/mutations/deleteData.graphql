@@ -1,0 +1,3 @@
+mutation deleteData ($table: String!) {
+  deleteData(table: $table)
+}

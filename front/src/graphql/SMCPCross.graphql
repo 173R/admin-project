@@ -1,0 +1,10 @@
+query SMCPCross ($id: Int) {
+  SMCPCross(id: $id) {
+    id
+    smc_id
+    place_id
+    is_enabled
+    time_start
+    time_stop
+  }
+}

@@ -1,0 +1,13 @@
+query customSensor ($mcuId: Int!) {
+  customSensor(mcuId: $mcuId) {
+    id
+    sensor {
+      id
+      name
+    }
+    place {
+      id
+      name
+    }
+  }
+}

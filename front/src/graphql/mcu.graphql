@@ -1,0 +1,8 @@
+query mcu ($id: Int) {
+  mcu(id: $id) {
+    id
+    name
+    mac
+    description
+  }
+}

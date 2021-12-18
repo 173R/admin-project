@@ -1,0 +1,8 @@
+query sData ($id: Int) {
+  sData(id: $id) {
+    id
+    smcpc_id,
+    sensor_value,
+    date_time,
+  }
+}

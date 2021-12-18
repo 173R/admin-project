@@ -1,0 +1,8 @@
+query sensor ($id: Int) {
+  sensor(id: $id) {
+    id
+    name
+    data_type
+    description
+  }
+}

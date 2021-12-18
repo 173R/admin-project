@@ -1,0 +1,37 @@
+version: '3'
+services:
+  front:
+    image: pelmeni/admin-front:0.1.1
+    container_name: front
+    ports:
+      - 80:80
+    networks:
+      - pelmeni
+    restart: always
+  data_base:
+    image: pelmeni/admin-base:0.1.0
+    container_name: data_base
+    ports:
+      - 5432:5432
+    networks:
+      - pelmeni
+    restart: always
+    environment:
+      POSTGRES_USER: artemdb
+      POSTGRES_PASSWORD: metra2856030
+      POSTGRES_DB: data_gav
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - admin_volume:/var/lib/postgresql/data
+  backend:
+    image: pelmeni/admin-back:0.1.1
+    container_name: backend
+    ports:
+      - 3000:3000
+    networks:
+      - pelmeni
+    restart: always
+volumes:
+  admin_volume:
+networks:
+  pelmeni:

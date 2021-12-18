@@ -1,0 +1,32 @@
+<nz-row [nzGutter]="[10,10]">
+
+  <nz-col nzSpan="4">
+    <nz-select [nzPlaceHolder]="'Таблица'" [style.width.%]="100" [(ngModel)]="selectedTable" (ngModelChange)="selectTable($event)">
+      <nz-option *ngFor="let table of tables" [nzValue]="table" [nzLabel]="table"></nz-option>
+    </nz-select>
+  </nz-col>
+  <nz-col>
+    <button nz-button nzType="primary" (click)="generateData()" [disabled]="selectedTable !== 'sdata'">Сгенерировать данные</button>
+  </nz-col>
+  <nz-col>
+    <button nz-button nzType="primary" (click)="deleteData()" [disabled]="selectedTable !== 'sdata'">Удалить данные</button>
+  </nz-col>
+
+  <nz-col nzSpan="24">
+    <nz-table #table [nzLoading]="loading" nzBordered [nzData]="dataFromTable" nzShowSizeChanger>
+      <thead>
+      <tr>
+        <th *ngFor="let name of columns">{{ name }}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let data of table.data">
+        <td *ngFor="let name of columns">
+          {{data[name]}}
+        </td>
+      </tr>
+      </tbody>
+    </nz-table>
+  </nz-col>
+</nz-row>
+

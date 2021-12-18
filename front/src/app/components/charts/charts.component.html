@@ -1,0 +1,43 @@
+<section>
+  <nz-row [nzGutter]="[10,10]">
+    <nz-col nzSpan="4">
+      <nz-select [nzPlaceHolder]="'Контроллер'" [style.width.%]="100" [(ngModel)]="selectedMcu" (ngModelChange)="getSensors($event)">
+        <nz-option *ngFor="let mcu of mcuList" [nzValue]="mcu.id" [nzLabel]="mcu.name"></nz-option>
+      </nz-select>
+    </nz-col>
+    <nz-col nzSpan="4">
+      <nz-select [nzPlaceHolder]="'Сенсоры'" [style.width.%]="100" [(ngModel)]="selectedSensor" [disabled]="!selectedMcu">
+        <nz-option
+          *ngFor="let sensor of sensors"
+          [nzValue]="sensor.id"
+          [nzLabel]="sensor.sensor.name + ', Расположен: ' + sensor.place.name">
+        </nz-option>
+      </nz-select>
+    </nz-col>
+    <nz-col nzSpan="4">
+      <nz-select [nzPlaceHolder]="'Время'" [style.width.%]="100" [(ngModel)]="selectedTimeSegment" [disabled]="!selectedSensor">
+        <nz-option
+          *ngFor="let segment of timeSegments"
+          [nzValue]="segment"
+          [nzLabel]="'Последние ' + segment + ' часов'">
+        </nz-option>
+      </nz-select>
+    </nz-col>
+    <nz-col nzSpan="4">
+      <button nz-button nzType="primary" (click)="buildChart()" [disabled]="!selectedTimeSegment">Построить график</button>
+    </nz-col>
+  </nz-row>
+</section>
+
+<section>
+  <div style="text-align:center">
+    <apx-chart
+      [series]="chartOptions.series"
+      [chart]="chartOptions.chart"
+      [stroke]="chartOptions.stroke"
+      [noData]="chartOptions.noData"
+      [yaxis]="chartOptions.yaxis"
+    ></apx-chart>
+  </div>
+
+</section>

@@ -12,6 +12,7 @@ import {
   TableNamesGQL
 } from "../../../generated/graphql";
 import {HttpClient, HttpParams} from "@angular/common/http";
+import {environment} from "../../../environments/environment";
 
 @Component({
   selector: 'app-data',
@@ -45,6 +46,7 @@ export class DataComponent implements OnInit {
 
   ngOnInit(): void {
     this.getTables();
+    console.log(window.location.href);
   }
 
   getTableColumns(name: string): void {
@@ -97,7 +99,7 @@ export class DataComponent implements OnInit {
         break;
       }
       case 'sdata': {
-        this.httpClient.get('http://localhost:3000/api/data', {
+        this.httpClient.get(environment.domain + '/data', {
           params: new HttpParams().set('table', 'sdata')
         }).subscribe((result: any) => {
             this.dataFromTable = result;

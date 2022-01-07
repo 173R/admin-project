@@ -1,36 +1,6 @@
-create sequence mcu_id_seq
-    as integer;
-
-alter sequence mcu_id_seq owner to artemdb;
-
-create sequence place_id_seq
-    as integer;
-
-alter sequence place_id_seq owner to artemdb;
-
-create sequence "sensor_id_seq"
-    as integer;
-
-alter sequence "sensor_id_seq" owner to artemdb;
-
-create sequence "s_m_cross_id_seq"
-    as integer;
-
-alter sequence "s_m_cross_id_seq" owner to artemdb;
-
-create sequence "smc_p_cross_id_seq"
-    as integer;
-
-alter sequence "smc_p_cross_id_seq" owner to artemdb;
-
-create sequence sdata_id_seq
-    as integer;
-
-alter sequence sdata_id_seq owner to artemdb;
-
 create table if not exists mcu
 (
-    id          integer default nextval('mcu_id_seq'::regclass) not null
+    id          serial not null
         constraint mcu_pk
             primary key,
     name        varchar(30)                                     not null,
@@ -50,7 +20,7 @@ create unique index if not exists mcu_mac_uindex
 
 create table if not exists "sensor"
 (
-    id          integer default nextval('"sensor_id_seq"'::regclass) not null
+    id         serial not null
         constraint sensor_pk
             primary key,
     name        varchar(30)                                          not null,
@@ -67,7 +37,7 @@ create unique index if not exists sensor_pk
 
 create table if not exists place
 (
-    id          integer default nextval('place_id_seq'::regclass) not null
+    id          serial not null
         constraint place_pk
             primary key,
     name        varchar(30)                                       not null,
@@ -83,7 +53,7 @@ create unique index if not exists place_pk
 
 create table if not exists "s_m_cross"
 (
-    id integer default nextval('"s_m_cross_id_seq"'::regclass) not null
+    id serial not null
         constraint s_m_cross_pk
             primary key,
     sensor_id integer
@@ -106,7 +76,7 @@ create unique index if not exists s_m_cross_sensor_id_uindex
 
 create table if not exists "smc_p_cross"
 (
-    id         integer default nextval('"smc_p_cross_id_seq"'::regclass) not null
+    id        serial not null
         constraint smc_p_cross_pk
             primary key,
     "smc_id"   integer
@@ -132,7 +102,7 @@ create unique index if not exists smc_p_cross_smc_id_uindex
 
 create table if not exists sdata
 (
-    id           integer   default nextval('sdata_id_seq'::regclass) not null
+    id         serial not null
         constraint sdata_pk
             primary key,
     date_time    timestamp default CURRENT_TIMESTAMP,

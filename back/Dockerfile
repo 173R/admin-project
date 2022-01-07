@@ -4,10 +4,9 @@ WORKDIR /usr/src/server
 
 COPY ./package.json ./
 COPY ./server.js ./
-COPY src/server_lib.js ./
-COPY src/server_lib.js ./
+COPY ./src/* ./src/
 
-RUN npm install
+RUN npm install -force
 
 ENTRYPOINT ["node", "server.js"]
 #Для сборки: docker build -t pelmeni/admin-back:0.1.1 .

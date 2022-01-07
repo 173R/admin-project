@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  graphqlDomain: 'http://localhost:3000/api/graphql',
+  graphqlDomain: 'http://artem.site/api/graphql',
+  domain: 'http://artem.site/api',
 };
 
 /*

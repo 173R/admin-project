@@ -5,17 +5,24 @@
         <nz-option *ngFor="let mcu of mcuList" [nzValue]="mcu.id" [nzLabel]="mcu.name"></nz-option>
       </nz-select>
     </nz-col>
-    <nz-col nzSpan="4">
-      <nz-select [nzPlaceHolder]="'Сенсоры'" [style.width.%]="100" [(ngModel)]="selectedSensor" [disabled]="!selectedMcu">
+    <nz-col>
+      <nz-select
+        nzMode="multiple"
+        [nzMaxTagCount]="4"
+        [nzPlaceHolder]="'Сенсоры'"
+        [style.min-width.px]="240"
+        [(ngModel)]="listOfSelectedSensors"
+        [disabled]="!selectedMcu">
         <nz-option
           *ngFor="let sensor of sensors"
           [nzValue]="sensor.id"
-          [nzLabel]="sensor.sensor.name + ', Расположен: ' + sensor.place.name">
+          [nzLabel]="sensor.sensor.name + ', Расположен: ' + sensor.place.name"
+        >
         </nz-option>
       </nz-select>
     </nz-col>
     <nz-col nzSpan="4">
-      <nz-select [nzPlaceHolder]="'Время'" [style.width.%]="100" [(ngModel)]="selectedTimeSegment" [disabled]="!selectedSensor">
+      <nz-select [nzPlaceHolder]="'Время'" [style.width.%]="100" [(ngModel)]="selectedTimeSegment" [disabled]="!listOfSelectedSensors.length">
         <nz-option
           *ngFor="let segment of timeSegments"
           [nzValue]="segment"

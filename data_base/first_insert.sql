@@ -14,10 +14,10 @@ INSERT INTO public."smc_p_cross" (id, "smc_id", place_id, is_enabled, time_start
 INSERT INTO public."smc_p_cross" (id, "smc_id", place_id, is_enabled, time_start, time_stop) VALUES (2, 6, 2, false, null, null);
 INSERT INTO public."smc_p_cross" (id, "smc_id", place_id, is_enabled, time_start, time_stop) VALUES (3, 7, 1, false, null, null);
 INSERT INTO public."smc_p_cross" (id, "smc_id", place_id, is_enabled, time_start, time_stop) VALUES (4, 8, 2, false, null, null);
-INSERT INTO public.sdata (id, date_time, sensor_value, "smcpc_id") VALUES (1, '2021-12-04 20:08:32.000000', 20.3, 1);
-INSERT INTO public.sdata (id, date_time, sensor_value, "smcpc_id") VALUES (2, '2021-12-04 20:09:24.000000', 20.5, 1);
-INSERT INTO public.sdata (id, date_time, sensor_value, "smcpc_id") VALUES (3, '2021-12-04 20:09:50.000000', 127, 2);
-INSERT INTO public.sdata (id, date_time, sensor_value, "smcpc_id") VALUES (4, '2021-12-04 20:10:25.000000', 207.3, 4);
+INSERT INTO public.sdata (date_time, sensor_value, "smcpc_id") VALUES ('2021-12-04 20:08:32.000000', 20.3, 1);
+INSERT INTO public.sdata (date_time, sensor_value, "smcpc_id") VALUES ('2021-12-04 20:09:24.000000', 20.5, 1);
+INSERT INTO public.sdata (date_time, sensor_value, "smcpc_id") VALUES ('2021-12-04 20:09:50.000000', 127, 2);
+INSERT INTO public.sdata (date_time, sensor_value, "smcpc_id") VALUES ('2021-12-04 20:10:25.000000', 207.3, 4);
 
 
 

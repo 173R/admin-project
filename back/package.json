@@ -3,19 +3,18 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "deploy": "rsync --exclude='node_modules' --archive --compress --delete . artem@192.168.0.7:~/server/"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "bytes": "^3.1.0",
-    "content-type": "^1.0.4",
-    "cors": "^2.8.5",
-    "express": "^4.17.1",
-    "express-graphql": "^0.12.0",
-    "graphql": "^16.1.0",
-    "pg-promise": "^10.11.0"
-  },
-  "description": ""
+    "body-parser": "^1.19.1",
+    "bytes": "3.1.0",
+    "content-type": "1.0.4",
+    "cors": "2.8.5",
+    "express": "4.17.1",
+    "express-graphql": "0.12.0",
+    "graphql": "^16.2.0",
+    "pg-promise": "10.11.0"
+  }
 }

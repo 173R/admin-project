@@ -9,7 +9,7 @@ services:
       - pelmeni
     restart: always
   data_base:
-    image: pelmeni/admin-base:0.1.0
+    image: pelmeni/admin-base:0.1.1
     container_name: data_base
     ports:
       - 5432:5432

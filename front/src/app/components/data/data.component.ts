@@ -65,6 +65,7 @@ export class DataComponent implements OnInit {
       case 'mcu': {
         this.mcuGQL.fetch().subscribe((result) =>{
           this.dataFromTable = result?.data?.mcu;
+          console.log(this.dataFromTable);
           this.loading = false;
         });
         break;

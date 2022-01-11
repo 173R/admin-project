@@ -3,7 +3,9 @@ function getRandomValue(min, max) {
 }
 
 function randomDate(start, end) {
-  return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+  const resultDate = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+  resultDate.setSeconds(0,0);
+  return resultDate.toISOString();
 }
 
 module.exports = {getRandomValue, randomDate}

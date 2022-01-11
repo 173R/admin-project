@@ -1,6 +1,6 @@
 const {randomDate, getRandomValue} = require("./server_lib");
 const pgp = require("pg-promise")(/*options*/);
-const db = pgp("postgres://artemdb:metra2856030@data_base:5432/data_gav");
+const db = pgp("postgres://artemdb:metra2856030@localhost:5432/data_gav");
 
 async function getMcu(id) {
   try {

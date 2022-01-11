@@ -28,6 +28,7 @@ import {NzSelectModule} from "ng-zorro-antd/select";
 import {NzButtonModule} from "ng-zorro-antd/button";
 import {NzNotificationModule} from "ng-zorro-antd/notification";
 import { GraphQLModule } from './graphql.module';
+import {NzDatePickerModule} from "ng-zorro-antd/date-picker";
 
 registerLocaleData(en);
 
@@ -59,7 +60,8 @@ const icons = [ SettingOutline, BarChartOutline, DatabaseOutline, ConsoleSqlOutl
     NzSelectModule,
     NzButtonModule,
     NzNotificationModule,
-    GraphQLModule
+    GraphQLModule,
+    NzDatePickerModule
   ],
   providers: [{ provide: NZ_I18N, useValue: en_US }],
   bootstrap: [AppComponent]

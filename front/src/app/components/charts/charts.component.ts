@@ -36,8 +36,9 @@ export class ChartsComponent implements OnInit{
   sdata = [];
   chartData: {x: string, y: number}[] = [];
   timeLine: string[] = [];
-  loading = true;
+  loading = false;
   dataTypes: string[] = [];
+  selectedDate: Date = new Date();
 
   constructor(
     private httpClient: HttpClient,
@@ -86,6 +87,7 @@ export class ChartsComponent implements OnInit{
   }
 
   buildChart(): void {
+    this.loading = true;
     if (this.listOfSelectedSensors.length > 1) {
 
       this.listOfSelectedSensors.forEach((sensor) => {
@@ -96,7 +98,8 @@ export class ChartsComponent implements OnInit{
 
       this.httpClient.post(environment.domain + '/data/sensors', {
         id: this.listOfSelectedSensors,
-        lastHours: this.selectedTimeSegment
+        lastHours: this.selectedTimeSegment,
+        dateTime: this.selectedDate,
       }).subscribe((result: any) => {
 
         console.log('result', result);
@@ -104,8 +107,6 @@ export class ChartsComponent implements OnInit{
 
         this.chartOptions.series = [];
         this.listOfSelectedSensors.forEach((sensor, i) => {
-          this.sensorGQL.fetch({id: sensor}).subscribe(name => {
-          });
 
           this.chartData = [];
           result.forEach((line, lineIndex) => {
@@ -121,10 +122,15 @@ export class ChartsComponent implements OnInit{
             }
           )
         });
+        this.loading = false;
       });
     } else {
       this.httpClient.get(environment.domain + '/data', {
-        params: new HttpParams().set('table', 'sdata').set('smcpcId', this.listOfSelectedSensors[0]).set('lastHours', this.selectedTimeSegment)
+        params: new HttpParams()
+          .set('table', 'sdata')
+          .set('dateTime', this.selectedDate?.toISOString())
+          .set('smcpcId', this.listOfSelectedSensors[0])
+          .set('lastHours', this.selectedTimeSegment)
       }).subscribe((result: any) => {
         this.sdata = result;
         if (this.sdata.length) {
@@ -141,6 +147,7 @@ export class ChartsComponent implements OnInit{
             }];
           })
         }
+        this.loading = false;
       });
     }
   }

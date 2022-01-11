@@ -20,7 +20,7 @@
       </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let data of table.data">
+      <tr *ngFor="let data of table?.data">
         <td *ngFor="let name of columns">
           {{data[name]}}
         </td>

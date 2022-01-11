@@ -10,6 +10,7 @@ import {
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {CustomSensor, CustomSensorGQL, Mcu, McuGQL, SensorGQL} from "../../../generated/graphql";
 import {environment} from "../../../environments/environment";
+import {ActivatedRoute, Router} from "@angular/router";
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -31,21 +32,39 @@ export class ChartsComponent implements OnInit{
   timeSegments: number[] = [1, 2, 6, 12, 24];
   selectedMcu: number = null;
   listOfSelectedSensors: number[] = [];
-  selectedSensor: number = null;
   selectedTimeSegment: number = null;
   sdata = [];
   chartData: {x: string, y: number}[] = [];
   timeLine: string[] = [];
   loading = false;
   dataTypes: string[] = [];
-  selectedDate: Date = new Date();
+  selectedDate: string = new Date().toISOString();
+
 
   constructor(
     private httpClient: HttpClient,
     private mcuGQL: McuGQL,
     private customSensorGQL: CustomSensorGQL,
     private sensorGQL: SensorGQL,
+    private router: Router,
+    private route: ActivatedRoute
   ) {
+    this.route.queryParams.subscribe(params => {
+      console.log(params);
+      this.selectedMcu = params.selectedMcu ? Number(params.selectedMcu) : null;
+      if (this.selectedMcu) {
+        this.getSensors(this.selectedMcu);
+        this.listOfSelectedSensors = params.id?.length ? params.id.map(id => Number(id)) : [];
+        if (this.listOfSelectedSensors.length) {
+          this.selectedTimeSegment = params.lastHours ? Number(params.lastHours) : null;
+          if (this.selectedTimeSegment) {
+            this.buildChart();
+          }
+        }
+      }
+
+      this.selectedDate = params.dateTime ?? new Date().toISOString();
+    });
     this.chartOptions = {
       series: [
         {
@@ -61,11 +80,7 @@ export class ChartsComponent implements OnInit{
       },
       stroke: {
         show: true,
-        //curve: 'smooth',
-        //lineCap: 'butt',
-        //colors: undefined,
         width: 2,
-        //dashArray: 0,
       },
     };
   }
@@ -86,9 +101,31 @@ export class ChartsComponent implements OnInit{
     this.mcuGQL.fetch().subscribe(result => this.mcuList = result?.data?.mcu);
   }
 
+  submit(): void {
+    this.loading = true;
+
+
+    const input = {
+      id: this.listOfSelectedSensors,
+      lastHours: this.selectedTimeSegment,
+      dateTime: this.selectedDate,
+    };
+
+    this.buildChart();
+
+    this.router.navigate([], {
+      queryParams: {
+        selectedMcu: this.selectedMcu,
+        ...input,
+      },
+      queryParamsHandling: 'merge',
+    });
+  }
+
+
   buildChart(): void {
     this.loading = true;
-    if (this.listOfSelectedSensors.length > 1) {
+    if (this.listOfSelectedSensors?.length > 1) {
 
       this.listOfSelectedSensors.forEach((sensor) => {
         this.sensorGQL.fetch({id: sensor}).subscribe(result => {
@@ -128,7 +165,7 @@ export class ChartsComponent implements OnInit{
       this.httpClient.get(environment.domain + '/data', {
         params: new HttpParams()
           .set('table', 'sdata')
-          .set('dateTime', this.selectedDate?.toISOString())
+          .set('dateTime', this.selectedDate.toString())
           .set('smcpcId', this.listOfSelectedSensors[0])
           .set('lastHours', this.selectedTimeSegment)
       }).subscribe((result: any) => {

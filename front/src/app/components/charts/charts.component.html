@@ -40,7 +40,7 @@
       ></nz-date-picker>
     </nz-col>
     <nz-col>
-      <button nz-button nzType="primary" [nzLoading]="loading" (click)="buildChart()" [disabled]="!selectedTimeSegment">Построить график</button>
+      <button nz-button nzType="primary" [nzLoading]="loading" (click)="submit()" [disabled]="!selectedTimeSegment">Построить график</button>
     </nz-col>
   </nz-row>
 </section>

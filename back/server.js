@@ -35,8 +35,9 @@ app.get('/api/data', (req, res) => {
         }
       )
   } else {
-    db.any(`SELECT * FROM ${req.query.table} ORDER BY ${req.query.table}.date_time`)
-      .then(
+    db.each(`SELECT * FROM ${req.query.table} ORDER BY ${req.query.table}.date_time`, [], row => {
+      console.log(row.date_time.toUTCString());
+    }).then(
         data => res.send(data),
         err => {
           res.send(err);
@@ -49,6 +50,7 @@ app.get('/api/data', (req, res) => {
 app.post('/api/data/sensors', (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   const selectedDate = Date.parse(req.body.dateTime) / 1000.0;
+  console.log(selectedDate);
   console.log(req.body);
   if (req.body.id.length === 2 && req.body.lastHours) {
     db.any(`
@@ -57,7 +59,7 @@ app.post('/api/data/sensors', (req, res) => {
       INNER JOIN sdata s2 ON date_trunc('second', s1.date_time) = date_trunc('second', s2.date_time)
       WHERE s1.smcpc_id = ${req.body.id[0]} 
       AND s2.smcpc_id = ${req.body.id[1]}
-      AND to_timestamp(${selectedDate}) - interval '${req.body.lastHours +' hour'}' <= s1.date_time
+      AND NOW() - interval '${req.body.lastHours +' hour'}' <= s1.date_time
       ORDER BY s1.date_time
     `).then(
       data => res.send(JSON.stringify(data)),

@@ -38,7 +38,7 @@ export class ChartsComponent implements OnInit{
   timeLine: string[] = [];
   loading = false;
   dataTypes: string[] = [];
-  selectedDate: string = new Date().toISOString();
+  selectedDate: Date = new Date();
 
 
   constructor(
@@ -51,20 +51,21 @@ export class ChartsComponent implements OnInit{
   ) {
     this.route.queryParams.subscribe(params => {
       console.log(params);
+      this.selectedDate = params.dateTime ? new Date(params.dateTime) : new Date();
       this.selectedMcu = params.selectedMcu ? Number(params.selectedMcu) : null;
       if (this.selectedMcu) {
         this.getSensors(this.selectedMcu);
-        this.listOfSelectedSensors = params.id?.length ? params.id.map(id => Number(id)) : [];
+
+        this.listOfSelectedSensors = params.id?.length ? Array.from(params.id).map(id => Number(id)) : [];
         if (this.listOfSelectedSensors.length) {
           this.selectedTimeSegment = params.lastHours ? Number(params.lastHours) : null;
-          if (this.selectedTimeSegment) {
+          if (this.selectedTimeSegment && !this.chartOptions?.series?.length) {
             this.buildChart();
           }
         }
       }
-
-      this.selectedDate = params.dateTime ?? new Date().toISOString();
     });
+
     this.chartOptions = {
       series: [
         {
@@ -103,20 +104,14 @@ export class ChartsComponent implements OnInit{
 
   submit(): void {
     this.loading = true;
-
-
-    const input = {
-      id: this.listOfSelectedSensors,
-      lastHours: this.selectedTimeSegment,
-      dateTime: this.selectedDate,
-    };
-
     this.buildChart();
 
     this.router.navigate([], {
       queryParams: {
         selectedMcu: this.selectedMcu,
-        ...input,
+        id: this.listOfSelectedSensors,
+        lastHours: this.selectedTimeSegment,
+        dateTime: this.selectedDate.toISOString(),
       },
       queryParamsHandling: 'merge',
     });
@@ -141,6 +136,7 @@ export class ChartsComponent implements OnInit{
 
         console.log('result', result);
         result.forEach(line => this.timeLine.push(new Date(line.date_time).toLocaleString()));
+        console.log()
 
         this.chartOptions.series = [];
         this.listOfSelectedSensors.forEach((sensor, i) => {
@@ -165,7 +161,7 @@ export class ChartsComponent implements OnInit{
       this.httpClient.get(environment.domain + '/data', {
         params: new HttpParams()
           .set('table', 'sdata')
-          .set('dateTime', this.selectedDate.toString())
+          .set('dateTime', this.selectedDate.toISOString())
           .set('smcpcId', this.listOfSelectedSensors[0])
           .set('lastHours', this.selectedTimeSegment)
       }).subscribe((result: any) => {

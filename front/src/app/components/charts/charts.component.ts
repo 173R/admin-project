@@ -38,6 +38,7 @@ export class ChartsComponent implements OnInit{
   timeLine: string[] = [];
   loading = true;
   dataTypes: string[] = [];
+  selectedDate: Date = new Date();
 
   constructor(
     private httpClient: HttpClient,
@@ -45,6 +46,7 @@ export class ChartsComponent implements OnInit{
     private customSensorGQL: CustomSensorGQL,
     private sensorGQL: SensorGQL,
   ) {
+    console.log(this.selectedDate.toISOString());
     this.chartOptions = {
       series: [
         {
@@ -94,9 +96,10 @@ export class ChartsComponent implements OnInit{
         });
       });
 
-      this.httpClient.post(environment.domain + '/data/sensors', {
+      this.httpClient.post('http://localhost:3000/api/data/sensors', { //environment.domain + '/data/sensors'
         id: this.listOfSelectedSensors,
-        lastHours: this.selectedTimeSegment
+        lastHours: this.selectedTimeSegment,
+        date: this.selectedDate,
       }).subscribe((result: any) => {
 
         console.log('result', result);

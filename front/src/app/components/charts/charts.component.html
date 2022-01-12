@@ -21,7 +21,7 @@
         </nz-option>
       </nz-select>
     </nz-col>
-    <nz-col nzSpan="4">
+    <nz-col nzSpan="3">
       <nz-select [nzPlaceHolder]="'Время'" [style.width.%]="100" [(ngModel)]="selectedTimeSegment" [disabled]="!listOfSelectedSensors.length">
         <nz-option
           *ngFor="let segment of timeSegments"
@@ -30,7 +30,10 @@
         </nz-option>
       </nz-select>
     </nz-col>
-    <nz-col nzSpan="4">
+    <nz-col>
+      <nz-date-picker [(ngModel)]="selectedDate"></nz-date-picker>
+    </nz-col>
+    <nz-col>
       <button nz-button nzType="primary" (click)="buildChart()" [disabled]="!selectedTimeSegment">Построить график</button>
     </nz-col>
   </nz-row>

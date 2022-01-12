@@ -28,6 +28,7 @@ import {NzSelectModule} from "ng-zorro-antd/select";
 import {NzButtonModule} from "ng-zorro-antd/button";
 import {NzNotificationModule} from "ng-zorro-antd/notification";
 import { GraphQLModule } from './graphql.module';
+import {NzDatePickerModule} from "ng-zorro-antd/date-picker";
 
 registerLocaleData(en);
 
@@ -43,24 +44,25 @@ const icons = [ SettingOutline, BarChartOutline, DatabaseOutline, ConsoleSqlOutl
     DataComponent,
     PhppgadminComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    FormsModule,
-    HttpClientModule,
-    BrowserAnimationsModule,
-    NzMenuModule,
-    NzIconModule,
-    NzIconModule.forRoot(icons),
-    NzLayoutModule,
-    NgApexchartsModule,
-    NzTableModule,
-    NzGridModule,
-    NzSelectModule,
-    NzButtonModule,
-    NzNotificationModule,
-    GraphQLModule
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        FormsModule,
+        HttpClientModule,
+        BrowserAnimationsModule,
+        NzMenuModule,
+        NzIconModule,
+        NzIconModule.forRoot(icons),
+        NzLayoutModule,
+        NgApexchartsModule,
+        NzTableModule,
+        NzGridModule,
+        NzSelectModule,
+        NzButtonModule,
+        NzNotificationModule,
+        GraphQLModule,
+        NzDatePickerModule
+    ],
   providers: [{ provide: NZ_I18N, useValue: en_US }],
   bootstrap: [AppComponent]
 })

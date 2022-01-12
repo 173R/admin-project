@@ -1,5 +1,5 @@
 const pgp = require("pg-promise")(/*options*/);
-const db = pgp("postgres://artemdb:metra2856030@data_base:5432/data_gav");//192.168.237.128//data_base
+const db = pgp("postgres://artemdb:metra2856030@192.168.237.129:5432/data_gav");//192.168.237.128//data_base
 const { graphqlHTTP } = require('express-graphql');
 const schema = require('./src/schema')
 const express = require('express');
@@ -35,9 +35,8 @@ app.get('/api/data', (req, res) => {
         }
       )
   } else {
-    db.each(`SELECT * FROM ${req.query.table} ORDER BY ${req.query.table}.date_time`, [], row => {
-      console.log(row.date_time.toUTCString());
-    }).then(
+    db.any(`SELECT * FROM ${req.query.table} ORDER BY ${req.query.table}.date_time`)
+      .then(
         data => res.send(data),
         err => {
           res.send(err);
@@ -50,13 +49,11 @@ app.get('/api/data', (req, res) => {
 app.post('/api/data/sensors', (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   const selectedDate = Date.parse(req.body.dateTime) / 1000.0;
-  console.log(selectedDate);
-  console.log(req.body);
   if (req.body.id.length === 2 && req.body.lastHours) {
     db.any(`
       SELECT s1.id, s1.date_time, s1.sensor_value as value1, s2.sensor_value as value2
       FROM sdata s1
-      INNER JOIN sdata s2 ON date_trunc('second', s1.date_time) = date_trunc('second', s2.date_time)
+      INNER JOIN sdata s2 ON date_trunc('minute', s1.date_time) = date_trunc('minute', s2.date_time)
       WHERE s1.smcpc_id = ${req.body.id[0]} 
       AND s2.smcpc_id = ${req.body.id[1]}
       AND to_timestamp(${selectedDate}) - interval '${req.body.lastHours +' hour'}' <= s1.date_time
@@ -72,8 +69,8 @@ app.post('/api/data/sensors', (req, res) => {
     db.any(`
       SELECT s1.id, s1.date_time, s1.sensor_value as value1, s2.sensor_value as value2, s3.sensor_value as value3
       FROM sdata s1
-      INNER JOIN sdata s2 ON date_trunc('second', s1.date_time) = date_trunc('second', s2.date_time)
-      INNER JOIN sdata s3 ON date_trunc('second', s1.date_time) = date_trunc('second', s3.date_time)
+      INNER JOIN sdata s2 ON date_trunc('minute', s1.date_time) = date_trunc('minute', s2.date_time)
+      INNER JOIN sdata s3 ON date_trunc('minute', s1.date_time) = date_trunc('minute', s3.date_time)
       WHERE s1.smcpc_id = ${req.body.id[0]}
       AND s2.smcpc_id = ${req.body.id[1]} 
       AND s3.smcpc_id = ${req.body.id[2]}
@@ -87,13 +84,12 @@ app.post('/api/data/sensors', (req, res) => {
       }
     )
   } else if (req.body.id.length === 4 && req.body.lastHours) {
-    let test = new Date();
     db.any(`
       SELECT s1.id, s1.date_time, s1.sensor_value as value1, s2.sensor_value as value2, s3.sensor_value as value3, s4.sensor_value as value4
       FROM sdata s1
-      INNER JOIN sdata s2 ON date_trunc('second', s1.date_time) = date_trunc('second', s2.date_time)
-      INNER JOIN sdata s3 ON date_trunc('second', s1.date_time) = date_trunc('second', s3.date_time)
-      INNER JOIN sdata s4 ON date_trunc('second', s1.date_time) = date_trunc('second', s4.date_time)
+      INNER JOIN sdata s2 ON date_trunc('minute', s1.date_time) = date_trunc('minute', s2.date_time)
+      INNER JOIN sdata s3 ON date_trunc('minute', s1.date_time) = date_trunc('minute', s3.date_time)
+      INNER JOIN sdata s4 ON date_trunc('minute', s1.date_time) = date_trunc('minute', s4.date_time)
       WHERE s1.smcpc_id = ${req.body.id[0]} 
       AND s2.smcpc_id = ${req.body.id[1]}
       AND s3.smcpc_id = ${req.body.id[2]}

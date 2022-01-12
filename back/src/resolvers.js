@@ -1,4 +1,4 @@
-const {randomDate, getRandomValue} = require("./server_lib");
+const {randomDate, getRandomValue, newRandomDate, getRandomInt} = require("./server_lib");
 const moment = require("moment");
 const pgp = require("pg-promise")(/*options*/);
 const db = pgp("postgres://artemdb:metra2856030@192.168.237.129:5432/data_gav");
@@ -124,8 +124,6 @@ async function getCustomSensor(mcuId) {
 //mutations
 
 async function deleteData(table) {
-  console.log(moment.utc(new Date()));
-  //console.log('aaaa', new moment.utc(new Date()).toDate());
   try {
     return await db.none(`TRUNCATE ${table}`).then(
       () => 'Успешно выполнено',
@@ -140,30 +138,28 @@ async function deleteData(table) {
 async function generateSData() {
   const currentDate = new Date();
   const inserts = [];
-  try {
-    await db.any('SELECT id FROM smc_p_cross').then(data => {
-      data.forEach(item => {
-        for (let i = 0; i < 100; i++) {
-          inserts.push({
-            sensor_value: getRandomValue(0, 100),
-            date_time: /*moment.utc(new Date()).toDate()*/ moment.utc(new Date()) /*randomDate(currentDate, new Date(currentDate - (24 * 60 * 60 * 1000) * 90))*/,
-            smcpc_id: item.id
-          })
-        }
-      });
+  await db.any('SELECT id FROM smc_p_cross').then(data => {
+    data.forEach(item => {
+      let dateForData = currentDate;
+      for (let i = 0; i < 1000000; i++) {
+        dateForData = moment(dateForData).subtract(getRandomInt(3, 6), "minutes").toDate()
+        inserts.push({
+          sensor_value: getRandomValue(0, 100),
+          date_time: dateForData,
+          smcpc_id: item.id
+        })
+      }
     });
-    try {
-      const query = pgp.helpers.insert(inserts, ['sensor_value', 'date_time', 'smcpc_id'], 'sdata');
-      return await db.none(query).then(
-        () => 'Данные успешно сгенерированны',
-        (err) => `Ошибка ${err}`,
-      );
-    } catch (err) {
-      console.log("ERROR:", err);
-      return `Ошибка ${err}`;
-    }
+  });
+  try {
+    const query = pgp.helpers.insert(inserts, ['sensor_value', 'date_time', 'smcpc_id'], 'sdata');
+    return await db.none(query).then(
+      () => 'Данные успешно сгенерированны',
+      (err) => `Ошибка ${err}`,
+    );
   } catch (err) {
-    console.log("Это пизда" + err.message)
+    console.log("ERROR:", err);
+    return `Ошибка ${err}`;
   }
 
 }

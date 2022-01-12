@@ -31,12 +31,6 @@
       </nz-select>
     </nz-col>
     <nz-col>
-<<<<<<< HEAD
-      <nz-date-picker [(ngModel)]="selectedDate"></nz-date-picker>
-    </nz-col>
-    <nz-col>
-      <button nz-button nzType="primary" (click)="buildChart()" [disabled]="!selectedTimeSegment">Построить график</button>
-=======
       <nz-date-picker
         nzAllowClear="false"
         nzShowTime
@@ -47,7 +41,9 @@
     </nz-col>
     <nz-col>
       <button nz-button nzType="primary" [nzLoading]="loading" (click)="submit()" [disabled]="!(selectedTimeSegment && listOfSelectedSensors.length)">Построить график</button>
->>>>>>> origin/work
+    </nz-col>
+    <nz-col>
+      <button nz-button nzType="primary" (click)="clearFilters()">Сбросить</button>
     </nz-col>
   </nz-row>
 </section>

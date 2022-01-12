@@ -4,9 +4,19 @@ function getRandomValue(min, max) {
   return Math.random() * (max - min) + min;
 }
 
-function randomDate(start, end) {
-  const resultDate = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
-  return moment.utc(resultDate).toDate();
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min)) + min; //Максимум не включается, минимум включается
 }
 
-module.exports = {getRandomValue, randomDate}
+function randomDate(start, end) {
+  return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+  //return moment(resultDate).toDate();
+}
+
+function newRandomDate(index, start, end) {
+
+}
+
+module.exports = {getRandomInt, getRandomValue, randomDate, newRandomDate}

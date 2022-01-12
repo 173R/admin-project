@@ -11,6 +11,7 @@ import {HttpClient, HttpParams} from "@angular/common/http";
 import {CustomSensor, CustomSensorGQL, Mcu, McuGQL, SensorGQL} from "../../../generated/graphql";
 import {environment} from "../../../environments/environment";
 import {ActivatedRoute, Router} from "@angular/router";
+import moment from "moment";
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -39,11 +40,6 @@ export class ChartsComponent implements OnInit{
   loading = false;
   dataTypes: string[] = [];
   selectedDate: Date = new Date();
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/work
-
   constructor(
     private httpClient: HttpClient,
     private mcuGQL: McuGQL,
@@ -52,9 +48,6 @@ export class ChartsComponent implements OnInit{
     private router: Router,
     private route: ActivatedRoute
   ) {
-<<<<<<< HEAD
-    console.log(this.selectedDate.toISOString());
-=======
     this.route.queryParams.subscribe(params => {
       console.log(params);
       this.selectedDate = params.dateTime ? new Date(params.dateTime) : new Date();
@@ -72,7 +65,6 @@ export class ChartsComponent implements OnInit{
       }
     });
 
->>>>>>> origin/work
     this.chartOptions = {
       series: [
         {
@@ -124,6 +116,12 @@ export class ChartsComponent implements OnInit{
     });
   }
 
+  clearFilters(): void {
+    this.selectedDate = new Date();
+    this.selectedMcu = null;
+    this.listOfSelectedSensors = [];
+    this.selectedTimeSegment = null;
+  }
 
   buildChart(): void {
     this.loading = true;
@@ -138,16 +136,11 @@ export class ChartsComponent implements OnInit{
       this.httpClient.post('http://localhost:3000/api/data/sensors', { //environment.domain + '/data/sensors'
         id: this.listOfSelectedSensors,
         lastHours: this.selectedTimeSegment,
-<<<<<<< HEAD
-        date: this.selectedDate,
-=======
         dateTime: this.selectedDate,
->>>>>>> origin/work
       }).subscribe((result: any) => {
 
         console.log('result', result);
         result.forEach(line => this.timeLine.push(new Date(line.date_time).toLocaleString()));
-        console.log()
 
         this.chartOptions.series = [];
         this.listOfSelectedSensors.forEach((sensor, i) => {

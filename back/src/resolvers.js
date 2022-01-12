@@ -1,16 +1,7 @@
 const {randomDate, getRandomValue} = require("./server_lib");
+const moment = require("moment");
 const pgp = require("pg-promise")(/*options*/);
-//const db = pgp("postgres://artemdb:metra2856030@192.168.237.128:5432/data_gav");
-//pgp.pg.defaults.query_timeout = 10;
-const db = pgp({
-  "host": "192.168.237.128",
-  "port": 5432,
-  "database": "data_gav",
-  "user": "artemdb",
-  "password": "metra2856030",
-  query_timeout: 100000
-});
-
+const db = pgp("postgres://artemdb:metra2856030@192.168.237.129:5432/data_gav");
 async function getMcu(id) {
   try {
     if (id) {
@@ -133,6 +124,8 @@ async function getCustomSensor(mcuId) {
 //mutations
 
 async function deleteData(table) {
+  console.log(moment.utc(new Date()));
+  //console.log('aaaa', new moment.utc(new Date()).toDate());
   try {
     return await db.none(`TRUNCATE ${table}`).then(
       () => 'Успешно выполнено',
@@ -149,12 +142,11 @@ async function generateSData() {
   const inserts = [];
   try {
     await db.any('SELECT id FROM smc_p_cross').then(data => {
-      console.log(data);
       data.forEach(item => {
-        for (let i = 0; i < 250000; i++) {
+        for (let i = 0; i < 100; i++) {
           inserts.push({
             sensor_value: getRandomValue(0, 100),
-            date_time: randomDate(currentDate, new Date(currentDate - (24 * 60 * 60 * 1000) * 90)),
+            date_time: /*moment.utc(new Date()).toDate()*/ moment.utc(new Date()) /*randomDate(currentDate, new Date(currentDate - (24 * 60 * 60 * 1000) * 90))*/,
             smcpc_id: item.id
           })
         }

@@ -44,6 +44,7 @@ const icons = [ SettingOutline, BarChartOutline, DatabaseOutline, ConsoleSqlOutl
     DataComponent,
     PhppgadminComponent
   ],
+<<<<<<< HEAD
     imports: [
         BrowserModule,
         AppRoutingModule,
@@ -63,6 +64,27 @@ const icons = [ SettingOutline, BarChartOutline, DatabaseOutline, ConsoleSqlOutl
         GraphQLModule,
         NzDatePickerModule
     ],
+=======
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    FormsModule,
+    HttpClientModule,
+    BrowserAnimationsModule,
+    NzMenuModule,
+    NzIconModule,
+    NzIconModule.forRoot(icons),
+    NzLayoutModule,
+    NgApexchartsModule,
+    NzTableModule,
+    NzGridModule,
+    NzSelectModule,
+    NzButtonModule,
+    NzNotificationModule,
+    GraphQLModule,
+    NzDatePickerModule
+  ],
+>>>>>>> origin/work
   providers: [{ provide: NZ_I18N, useValue: en_US }],
   bootstrap: [AppComponent]
 })

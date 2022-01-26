@@ -11,7 +11,6 @@ import {HttpClient, HttpParams} from "@angular/common/http";
 import {CustomSensor, CustomSensorGQL, Mcu, McuGQL, SensorGQL} from "../../../generated/graphql";
 import {environment} from "../../../environments/environment";
 import {ActivatedRoute, Router} from "@angular/router";
-import moment from "moment";
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -35,7 +34,7 @@ export class ChartsComponent implements OnInit{
   listOfSelectedSensors: number[] = [];
   selectedTimeSegment: number = null;
   sdata = [];
-  chartData: {x: string, y: number}[] = [];
+  chartData: number[] = [];
   timeLine: string[] = [];
   loading = false;
   dataTypes: string[] = [];
@@ -82,6 +81,7 @@ export class ChartsComponent implements OnInit{
         show: true,
         width: 2,
       },
+      labels: [],
     };
   }
 
@@ -133,25 +133,29 @@ export class ChartsComponent implements OnInit{
         });
       });
 
-      this.httpClient.post('http://localhost:3000/api/data/sensors', { //environment.domain + '/data/sensors'
+      this.httpClient.post(environment.domain + '/data/sensors', { //environment.domain + '/data/sensors'
         id: this.listOfSelectedSensors,
         lastHours: this.selectedTimeSegment,
         dateTime: this.selectedDate,
       }).subscribe((result: any) => {
 
         console.log('result', result);
-        result.forEach(line => this.timeLine.push(new Date(line.date_time).toLocaleString()));
+        this.chartOptions.labels = [];
+        result.forEach(line => this.chartOptions.labels.push(new Date(line.date_time).toLocaleString()));
 
         this.chartOptions.series = [];
         this.listOfSelectedSensors.forEach((sensor, i) => {
-
           this.chartData = [];
+          let tmp: number = 0;
           result.forEach((line, lineIndex) => {
-            this.chartData.push({
-              x: this.timeLine[lineIndex],
-              y: line["value" + (i + 1)],
-            })
+            if (line["value" + (i + 1)] !== null) {
+              tmp = line["value" + (i + 1)];
+              this.chartData.push(tmp)
+            } else {
+              this.chartData.push(tmp);
+            }
           });
+
           this.chartOptions.series.push(
             {
               data: this.chartData,
@@ -172,10 +176,7 @@ export class ChartsComponent implements OnInit{
         this.sdata = result;
         if (this.sdata.length) {
           this.chartData = [];
-          this.sdata.forEach(data => this.chartData.push({
-            x: new Date(data.date_time).toLocaleString(),
-            y: data.sensor_value,
-          }));
+          this.sdata.forEach(data => this.chartData.push(data.sensor_value));
           this.sensorGQL.fetch({id: this.listOfSelectedSensors[0]}).subscribe(result => {
             console.log(result);
             this.chartOptions.series = [{

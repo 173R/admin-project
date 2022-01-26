@@ -11,6 +11,8 @@ services:
   data_base:
     image: pelmeni/admin-base:0.1.1
     container_name: data_base
+    shm_size: 1g
+    command: postgres -c config_file=/etc/base.conf
     ports:
       - 5432:5432
     networks:
